@@ -11,21 +11,33 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
+import time
+from django.contrib.messages import constants as messages
+if os.path.isfile('env.py'):
+    import env
+
+STATIC_VERSION = int(time.time())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=#0&k02%8=8kebw+yp32%gc@2@nbik=h&gyijw79@^022-20dw'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['8000-tayapro-djangosmtpemail-os4u8fabdkq.ws.codeinstitute-ide.net',
+                 '.herokuapp.com']
+
+CSRF_TRUSTED_ORIGINS = ['https://8000-tayapro-djangosmtpemail-os4u8fabdkq.ws.codeinstitute-ide.net']
 
 
 # Application definition
@@ -37,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'smpt_email_sender',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +134,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+#sender's email-id
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER") 
+#password associated with above email-id (not the regular password)
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") 
