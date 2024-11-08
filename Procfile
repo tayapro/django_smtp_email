@@ -1,0 +1,1 @@
+web: gunicorn smtp_email_project.wsgi
